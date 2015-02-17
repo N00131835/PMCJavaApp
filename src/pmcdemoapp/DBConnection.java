@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+//This class represents a connection to the database
 public class DBConnection {
 
     private static Connection sConnection;
