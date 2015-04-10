@@ -26,8 +26,13 @@ public class Model {
 
     private List<Property> properties;
     private List<Area> areas;
+    private List<Owner> owners;
+    //private List<Tenant> tenants;
+    
     private PropertyTableGateway propertyGateway;
     private AreaTableGateway areaGateway;
+    private OwnerTableGateway ownerGateway;
+    //private TenantTableGateway tenantGateway;
 
     //this will connect to the DBConnection class that would be able to connect to the database phpmyadmin
     private Model() {
@@ -36,9 +41,13 @@ public class Model {
             Connection conn = DBConnection.getInstance();
             this.propertyGateway = new PropertyTableGateway(conn);
             this.areaGateway = new AreaTableGateway(conn);
+            this.ownerGateway = new OwnerTableGateway(conn);
+            //this.tenantGateway = new TenantTableGateway(conn);
             
             this.properties = this.propertyGateway.getProperties();
             this.areas = this.areaGateway.getAreas();
+            this.owners = this.ownerGateway.getOwners();
+            //this.tenants = this.tenantGateway.getTenants();
         } 
         catch (ClassNotFoundException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
@@ -121,33 +130,6 @@ public class Model {
         return new ArrayList<Area>(this.areas);
     }
     
-    //the code below will be able to add a area 
-    public void addArea(Area a) {
-        try {
-            areaGateway.insertArea(a.getAreaName(), a.getFacilities());
-            this.areas.add(a);
-        } 
-        catch (SQLException ex) {
-            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    //the code below will be able to delete a area 
-    public boolean removeArea(Area a) {
-        boolean removed = false;
-        
-        try {
-            removed = this.areaGateway.deleteArea(a.getAreaID());
-            if (removed) {
-                removed = this.areas.remove(a);
-            }
-        }
-        catch (SQLException ex) {
-            Logger.getLogger(Model.class.getName()).log(Level.SEVERE , null, ex);
-        }   
-        return removed;
-    }
-    
     //@author n00131835
     
     //the code below will be able to update a area 
@@ -181,4 +163,72 @@ public class Model {
         }
         return a;
     }
+    
+    ///////////////////////////////////////////////////////////////////
+    
+    public List<Owner> getOwners() {
+        return new ArrayList<Owner>(this.owners);
+    }
+    
+    //the code below will be able to add a owner
+    public void addOwner(Owner o) {
+        try {
+            ownerGateway.insertOwner(o.getFirstName(), o.getLastName(), o.getAddress1(), o.getAddress2(), o.getTown(), o.getCounty(), o.getMobileNum(), o.getEmail());
+            this.owners.add(o);
+        } 
+        catch (SQLException ex) {
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    //the code below will be able to delete a owner
+    public boolean removeOwner(Owner o) {
+        boolean removed = false;
+        
+        try {
+            removed = this.ownerGateway.deleteOwner(o.getOwnerID());
+            if (removed) {
+                removed = this.owners.remove(o);
+            }
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE , null, ex);
+        }   
+        return removed;
+    }
+    
+    //@author n00131835
+    
+    //the code below will be able to update a owner
+    public boolean updateOwner(Owner o) {
+        boolean updated = false;
+        
+        try {
+            updated = this.ownerGateway.updateOwner(o);
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE , null, ex);
+        }   
+        return updated;
+    }
+    
+    //the code below will be able to find the ownerby its OwnerID
+    public Owner findOwnerById(int ownerID) {
+        Owner o = null;
+        int i = 0;
+        boolean found = false;
+        while (i < this.owners.size() && !found) {
+            o = this.owners.get(i);
+            if (o.getOwnerID() == ownerID) {
+                found = true;
+            } else {
+                i++;
+            }
+        }
+        if (!found) {
+            o = null;
+        }
+        return o;
+    }
+    
 }

@@ -31,6 +31,8 @@ public class PMCDemoApp {
         Model model = Model.getInstance(); // Model Class
         
         Property p; // Property Class
+        Owner o; // Owner Class
+        //Tenant t; // Tenant Class
         
         int option; // initialising the variable option
         
@@ -51,7 +53,14 @@ public class PMCDemoApp {
             System.out.println("5. View all Areas");
             System.out.println("6. Edit existing Area");
             System.out.println("-------------------------");
-            System.out.println("7. Exit");
+            System.out.println("----------OWNER----------");
+            System.out.println("-------------------------");
+            System.out.println("7. Create new Owner");
+            System.out.println("8. View all Owner");
+            System.out.println("9. Edit existing Owner");
+            System.out.println("10. Delete Owner");
+            System.out.println("-------------------------");
+            System.out.println("15. Exit");
             System.out.println("-------------------------");
             System.out.println();
             
@@ -93,6 +102,7 @@ public class PMCDemoApp {
                     break;
                     //option 4 is Deleting a Property
                 }
+                
                 // AREA OPTIONS
                 case 5: {
                     System.out.println("Viewing all Areas");
@@ -108,9 +118,40 @@ public class PMCDemoApp {
                     break;
                     //option 3 is Editing a Property
                 }
+                
+                //PROPERTY OPTIONS
+                case 7: {
+                    System.out.println("Creating an Owner");
+                    System.out.println();
+                    o = readOwner(keyboard);
+                    model.addOwner(o);
+                    break;
+                    //option 1 is Creating an Owner
+                }
+                case 8: {
+                    System.out.println("Viewing all the Owners");
+                    System.out.println();
+                    viewOwner(model);
+                    break;
+                    //option 2 is Viewing all the Owners
+                }
+                case 9: {
+                    System.out.println("Editing an Owner");
+                    System.out.println();
+                    editOwner(keyboard, model);
+                    break;
+                    //option 3 is Editing an Owner
+                }
+                case 10: {
+                    System.out.println("Deleting an Owner");
+                    System.out.println();
+                    deleteOwner(keyboard, model);
+                    break;
+                    //option 4 is Deleting an Owner
+                }
             }
         }
-        while (option != 7);
+        while (option != 15);
         //option 5 is going to stop the application from running.
         System.out.println("Goodbye");
         
@@ -286,8 +327,8 @@ public class PMCDemoApp {
     }
     //@author n00131835
     
-    ///////////////////////////////////////////////////////////////////////////
-
+    ////////////////////////////////////////////////////////////////////////////
+    
     //the code below is the one that can show the user the area when you run the application
     private static void viewArea(Model model) {
         List<Area> areas = model.getAreas();
@@ -361,4 +402,174 @@ public class PMCDemoApp {
             System.out.println(); //This is just a line break so that the code is not too squished.
         }
     }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    
+    //the code below is the one that creates the owner when you run the application
+    private static Owner readOwner(Scanner keyboard) {
+        //initiliasing variables from the Owner Class
+        String firstname, lastname, address1, address2, town, county, email;
+        int mobilenum;
+        String line3;
+
+        firstname = getString(keyboard, "Enter firstname: ");
+        lastname = getString(keyboard, "Enter lastname: ");
+        address1 = getString(keyboard, "Enter address1: ");
+        address2 = getString(keyboard, "Enter address2: ");
+        town = getString(keyboard, "Enter town: ");
+        county = getString(keyboard, "Enter county: ");
+        line3 = getString(keyboard, "Enter mobilenum: ");
+        mobilenum = Integer.parseInt(line3);
+        email = getString(keyboard, "Enter email: ");
+        System.out.println();
+        System.out.println();
+
+        Owner o = new Owner(firstname, lastname, address1, address2, town, county, mobilenum, email);
+        
+        return o;
+    }  
+
+    //the code below is the one that can show the user the owner when you run the application
+    private static void viewOwner(Model model) {
+        List<Owner> owners = model.getOwners();
+        if (owners.isEmpty()){
+            System.out.println("The are no owners in the database.");
+        }
+        else {
+            // This will create the columns that will appear here in the output when you run the apo.
+            System.out.printf("%10s %15s %15s %20s %20s %18s %12s %15s %30s\n", "OwnerID", "FirstName", "LastName", "Address1", "Address2", "Town", "County", "MobileNum", "Email");
+            for (Owner o : owners) {
+                int length = o.getFirstName().length();
+                if (length > 25) {
+                    length = 25;
+                }
+                // This will create the columns where the info from the database is being placed.
+                System.out.printf("%10d %15s %15s %20s %20s %18s %12s %15d %30s\n",
+                        o.getOwnerID(),
+                        o.getFirstName(),
+                        o.getLastName(),
+                        o.getAddress1(),
+                        o.getAddress2(),
+                        o.getTown(),
+                        o.getCounty(),
+                        o.getMobileNum(),
+                        o.getEmail());
+            }
+        System.out.println(); 
+        System.out.println(); //This is just a line break so that the code in not too squished.
+        }
+    }
+
+    //@author n00131835
+    
+    //the code below allows the user to edit the owner when you run the application
+    private static void editOwnerDetails(Scanner keyboard, Owner o) {
+        //initiliasing variables from the Owner Class
+        String firstname, lastname, address1, address2, town, county, email;
+        int mobilenum;
+        String line3;
+        
+        //this will get the information for the database and place it in i.e. o.getAddress1
+        firstname = getString(keyboard, "Enter firstname: [" + o.getFirstName() + "]: ");
+        lastname = getString(keyboard, "Enter lastname: [" + o.getLastName() + "]: ");
+        address1 = getString(keyboard, "Enter address1: [" + o.getAddress1() + "]: ");
+        address2 = getString(keyboard, "Enter address2: [" + o.getAddress2() + "]: ");
+        town = getString(keyboard, "Enter town: [" + o.getTown() + "]: ");
+        county = getString(keyboard, "Enter county: [" + o.getCounty() + "]: ");
+        line3 = getString(keyboard, "Enter mobilenum: [" + o.getMobileNum() + "]: ");
+        email = getString(keyboard, "Enter county: [" + o.getCounty() + "]: ");
+    
+        //while the code below will set it to whichever the user type into the database and later on we can check(view) whether it worked or not.
+        if (firstname.length() != 0) {
+            o.setFirstName(firstname);
+        }
+        if (lastname.length() != 0) {
+            o.setLastName(lastname);
+        }
+        if (address1.length() != 0) {
+            o.setAddress1(address1);
+        }
+        if (address2.length() != 0) {
+            o.setAddress2(address2);
+        }
+        if (town.length() != 0) {
+            o.setTown(town);
+        }
+        if (county.length() != 0) {
+            o.setCounty(county);
+        }
+        if (line3.length() != 0) {
+            mobilenum = Integer.parseInt(line3);
+            o.setMobileNum(mobilenum);
+        }
+        if (email.length() != 0) {
+            o.setEmail(email);
+        }
+    }
+    
+    //the code below will return true or false whether the Owner has been updated or not.
+    private static void editOwner(Scanner keyboard, Model model) {
+        System.out.print("Enter the OwnerID of the owner you wish to edit: ");
+        int ownerID = Integer.parseInt(keyboard.nextLine());
+        Owner o;
+
+        o = model.findOwnerById(ownerID);
+        if (o != null) {
+            editOwnerDetails(keyboard, o);
+            if (model.updateOwner(o)) {
+                System.out.println();
+                System.out.println();
+                System.out.println("Owner updated");
+                System.out.println();
+                System.out.println(); //This is just a line break so that the code in not too squished.
+            }
+            else {
+                System.out.println();
+                System.out.println();
+                System.out.println("Owner not updated");
+                System.out.println();
+                System.out.println(); //This is just a line break so that the code in not too squished.
+            }
+        }
+        else {
+            System.out.println();
+            System.out.println();
+            System.out.println("Owner not found");
+            System.out.println();
+            System.out.println(); //This is just a line break so that the code is not too squished.
+        }
+    }
+    
+    //the code below will return true or false whether the Owner has been deleted or not.
+    private static void deleteOwner(Scanner keyboard, Model model) {
+        System.out.print("Enter the OwnerID of the owner you wish to delete: ");
+        int ownerID = Integer.parseInt(keyboard.nextLine());
+        Owner o;
+
+        o = model.findOwnerById(ownerID);
+        if (o != null) {
+            if (model.removeOwner(o)) {
+                System.out.println();
+                System.out.println();
+                System.out.println("Owner deleted");
+                System.out.println();
+                System.out.println();//This is just a line break so that the code is not too squished.
+            }
+            else {
+                System.out.println();
+                System.out.println();
+                System.out.println("Owner not deleted");
+                System.out.println();
+                System.out.println();//This is just a line break so that the code is not too squished.
+            }
+        }
+        else {
+            System.out.println();
+            System.out.println();
+            System.out.println("Owner not found");
+            System.out.println();
+            System.out.println();//This is just a line break so that the code is not too squished.
+        }
+    }
+    //@author n00131835
 }
