@@ -43,10 +43,10 @@ class OwnerTableGateway {
         ResultSet rs;       // the java.sql.ResultSet representing the result of SQL query 
         List<Owner> owners;   // the java.util.List containing the Programmer objects created for each row in the result of the query
         //initiliasing variables from the Owner Class
-        int ownerID;             // the id of a owner
+        int ownerID;  // the id of a owner
         String firstname, lastname, address1, address2, town, county, email;
         int mobilenum;
-        Owner o;       // a Owner object created from a row in the result of the query
+        Owner o;  // a Owner object created from a row in the result of the query
 
         // execute an SQL SELECT statement to get a java.util.ResultSet representing
         // the results of the SELECT statement

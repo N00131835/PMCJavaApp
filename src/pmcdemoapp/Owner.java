@@ -81,8 +81,6 @@ public class Owner {
         this.address2 = address2;
     }
     
-    //@author n00131835
-    
     // get and set methods for Town
     public String getTown() {
         return town;
@@ -91,6 +89,8 @@ public class Owner {
     public void setTown(String town) {
         this.town = town;
     }
+
+    //@author n00131835
     
     // get and set methods for County
     public String getCounty() {

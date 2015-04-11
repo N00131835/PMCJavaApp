@@ -32,7 +32,7 @@ public class PMCDemoApp {
         
         Property p; // Property Class
         Owner o; // Owner Class
-        //Tenant t; // Tenant Class
+        Tenant t; // Tenant Class
         
         int option; // initialising the variable option
         
@@ -59,6 +59,13 @@ public class PMCDemoApp {
             System.out.println("8. View all Owner");
             System.out.println("9. Edit existing Owner");
             System.out.println("10. Delete Owner");
+            System.out.println("-------------------------");
+            System.out.println("---------TENANT----------");
+            System.out.println("-------------------------");
+            System.out.println("11. Create new Tenant");
+            System.out.println("12. View all Tenant");
+            System.out.println("13. Edit existing Tenant");
+            System.out.println("14. Delete Tenant");
             System.out.println("-------------------------");
             System.out.println("15. Exit");
             System.out.println("-------------------------");
@@ -119,7 +126,7 @@ public class PMCDemoApp {
                     //option 3 is Editing a Property
                 }
                 
-                //PROPERTY OPTIONS
+                //OWNER OPTIONS
                 case 7: {
                     System.out.println("Creating an Owner");
                     System.out.println();
@@ -148,6 +155,37 @@ public class PMCDemoApp {
                     deleteOwner(keyboard, model);
                     break;
                     //option 4 is Deleting an Owner
+                }
+                
+                //TENANT OPTIONS
+                case 11: {
+                    System.out.println("Creating an Tenant");
+                    System.out.println();
+                    t = readTenant(keyboard);
+                    model.addTenant(t);
+                    break;
+                    //option 1 is Creating an Tenant
+                }
+                case 12: {
+                    System.out.println("Viewing all the Tenants");
+                    System.out.println();
+                    viewTenant(model);
+                    break;
+                    //option 2 is Viewing all the Tenants
+                }
+                case 13: {
+                    System.out.println("Editing an Tenant");
+                    System.out.println();
+                    editTenant(keyboard, model);
+                    break;
+                    //option 3 is Editing an Tenant
+                }
+                case 14: {
+                    System.out.println("Deleting an Tenant");
+                    System.out.println();
+                    deleteTenant(keyboard, model);
+                    break;
+                    //option 4 is Deleting an Tenant
                 }
             }
         }
