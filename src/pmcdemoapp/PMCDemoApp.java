@@ -32,7 +32,6 @@ public class PMCDemoApp {
         
         Property p; // Property Class
         Owner o; // Owner Class
-        Tenant t; // Tenant Class
         
         int option; // initialising the variable option
         
@@ -60,21 +59,12 @@ public class PMCDemoApp {
             System.out.println("9. Edit existing Owner");
             System.out.println("10. Delete Owner");
             System.out.println("-------------------------");
-            System.out.println("---------TENANT----------");
-            System.out.println("-------------------------");
-            System.out.println("11. Create new Tenant");
-            System.out.println("12. View all Tenant");
-            System.out.println("13. Edit existing Tenant");
-            System.out.println("14. Delete Tenant");
-            System.out.println("-------------------------");
-            System.out.println("15. Exit");
+            System.out.println("11. Exit");
             System.out.println("-------------------------");
             System.out.println();
             
             //This is where the user will type the option they want to pick
-            System.out.print("Enter an option: ");
-            String line = keyboard.nextLine();
-            option = Integer.parseInt(line);
+            option = getInt(keyboard, "Enter an option: ", 11);
             
             //@author n00131835
             //System.out.println("You chose option " + option);
@@ -156,40 +146,9 @@ public class PMCDemoApp {
                     break;
                     //option 4 is Deleting an Owner
                 }
-                
-                //TENANT OPTIONS
-                case 11: {
-                    System.out.println("Creating an Tenant");
-                    System.out.println();
-                    t = readTenant(keyboard);
-                    model.addTenant(t);
-                    break;
-                    //option 1 is Creating an Tenant
-                }
-                case 12: {
-                    System.out.println("Viewing all the Tenants");
-                    System.out.println();
-                    viewTenant(model);
-                    break;
-                    //option 2 is Viewing all the Tenants
-                }
-                case 13: {
-                    System.out.println("Editing an Tenant");
-                    System.out.println();
-                    editTenant(keyboard, model);
-                    break;
-                    //option 3 is Editing an Tenant
-                }
-                case 14: {
-                    System.out.println("Deleting an Tenant");
-                    System.out.println();
-                    deleteTenant(keyboard, model);
-                    break;
-                    //option 4 is Deleting an Tenant
-                }
             }
         }
-        while (option != 15);
+        while (option != 11);
         //option 5 is going to stop the application from running.
         System.out.println("Goodbye");
         
@@ -200,23 +159,44 @@ public class PMCDemoApp {
         System.out.print(prompt);
         return keyboard.nextLine();
     }
+    
+    private static int getInt(Scanner keyboard, String prompt, int defValue){
+        int option = defValue;
+        boolean finished = false;
+        
+        do{
+            try{
+                System.out.print(prompt);
+                String line = keyboard.nextLine();
+                if (line.length() > 0){
+                    option = Integer.parseInt(line);
+                }
+                finished = true;
+            }
+            catch(NumberFormatException e) {
+                System.out.println("Exception: " + e.getMessage());
+                System.out.println();
+                System.out.println();
+            }
+        }
+        while (!finished);
+        
+        return option;
+    }
    
     //the code below is the one that creates the property when you run the application
     private static Property readProperty(Scanner keyboard) {
         //initiliasing variables from the Property Class
         String address1, address2, town, county, description;
         int rent, bedrooms;
-        String line1, line2;
 
         address1 = getString(keyboard, "Enter address1: ");
         address2 = getString(keyboard, "Enter address2: ");
         town = getString(keyboard, "Enter town: ");
         county = getString(keyboard, "Enter county: ");
         description = getString(keyboard, "Enter description: ");
-        line1 = getString(keyboard, "Enter rent: ");
-        rent = Integer.parseInt(line1);
-        line2 = getString(keyboard, "Enter bedrooms: ");
-        bedrooms = Integer.parseInt(line2);
+        rent = getInt(keyboard, "Enter rent: ", 0);
+        bedrooms = getInt(keyboard, "Enter bedrooms: ", 0);
         System.out.println();
         System.out.println();
 
@@ -262,7 +242,6 @@ public class PMCDemoApp {
         //initiliasing variables from the Property Class
         String address1, address2, town, county, description;
         int rent, bedrooms;
-        String line1, line2;
         
         //this will get the information for the database and place it in i.e. p.getAddress1
         address1 = getString(keyboard, "Enter address1: [" + p.getAddress1() + "]: ");
@@ -270,8 +249,8 @@ public class PMCDemoApp {
         town = getString(keyboard, "Enter town: [" + p.getTown() + "]: ");
         county = getString(keyboard, "Enter county: [" + p.getCounty() + "]: ");
         description = getString(keyboard, "Enter description: [" + p.getDescription() + "]: ");
-        line1 = getString(keyboard, "Enter rent: [" + p.getRent() + "]: ");
-        line2 = getString(keyboard, "Enter bedrooms: [" + p.getBedrooms() + "]: ");
+        rent = getInt(keyboard, "Enter rent: [" + p.getRent() + "]: ", 0);
+        bedrooms = getInt(keyboard, "Enter bedrooms: [" + p.getBedrooms() + "]: ", 0);
     
         //while the code below will set it to whichever the user type into the database and later on we can check(view) whether it worked or not.
         if (address1.length() != 0) {
@@ -289,20 +268,17 @@ public class PMCDemoApp {
         if (description.length() != 0) {
             p.setDescription(description);
         }
-        if (line1.length() != 0) {
-            rent = Integer.parseInt(line1);
+        if (rent != p.getRent()) {
             p.setRent(rent);
         }
-        if (line2.length() != 0) {
-            bedrooms = Integer.parseInt(line2);
+        if (bedrooms != p.getBedrooms()) {
             p.setBedrooms(bedrooms);
         }
     }
     
     //the code below will return true or false whether the Property has been updated or not.
     private static void editProperty(Scanner keyboard, Model model) {
-        System.out.print("Enter the PropertyID of the property you wish to edit: ");
-        int propertyID = Integer.parseInt(keyboard.nextLine());
+        int propertyID = getInt(keyboard, "Enter the PropertyID of the property you wish to edit: ", 0);
         Property p;
 
         p = model.findPropertyById(propertyID);
@@ -334,8 +310,7 @@ public class PMCDemoApp {
     
     //the code below will return true or false whether the Property has been deleted or not.
     private static void deleteProperty(Scanner keyboard, Model model) {
-        System.out.print("Enter the PropertyID of the property you wish to delete: ");
-        int propertyID = Integer.parseInt(keyboard.nextLine());
+        int propertyID = getInt(keyboard, "Enter the PropertyID of the property you wish to edit: ", 0);
         Property p;
 
         p = model.findPropertyById(propertyID);
@@ -410,8 +385,7 @@ public class PMCDemoApp {
     
     //the code below will return true or false whether the Area has been updated or not.
     private static void editArea(Scanner keyboard, Model model) {
-        System.out.print("Enter the AreaID of the area you wish to edit: ");
-        int areaID = Integer.parseInt(keyboard.nextLine());
+        int areaID = getInt(keyboard, "Enter the AreaID of the area you wish to edit: ", 0);
         Area a;
 
         a = model.findAreaById(areaID);
@@ -448,7 +422,6 @@ public class PMCDemoApp {
         //initiliasing variables from the Owner Class
         String firstname, lastname, address1, address2, town, county, email;
         int mobilenum;
-        String line3;
 
         firstname = getString(keyboard, "Enter firstname: ");
         lastname = getString(keyboard, "Enter lastname: ");
@@ -456,8 +429,7 @@ public class PMCDemoApp {
         address2 = getString(keyboard, "Enter address2: ");
         town = getString(keyboard, "Enter town: ");
         county = getString(keyboard, "Enter county: ");
-        line3 = getString(keyboard, "Enter mobilenum: ");
-        mobilenum = Integer.parseInt(line3);
+        mobilenum = getInt(keyboard, "Enter mobilenum: ", 0);
         email = getString(keyboard, "Enter email: ");
         System.out.println();
         System.out.println();
@@ -505,7 +477,6 @@ public class PMCDemoApp {
         //initiliasing variables from the Owner Class
         String firstname, lastname, address1, address2, town, county, email;
         int mobilenum;
-        String line3;
         
         //this will get the information for the database and place it in i.e. o.getAddress1
         firstname = getString(keyboard, "Enter firstname: [" + o.getFirstName() + "]: ");
@@ -514,8 +485,8 @@ public class PMCDemoApp {
         address2 = getString(keyboard, "Enter address2: [" + o.getAddress2() + "]: ");
         town = getString(keyboard, "Enter town: [" + o.getTown() + "]: ");
         county = getString(keyboard, "Enter county: [" + o.getCounty() + "]: ");
-        line3 = getString(keyboard, "Enter mobilenum: [" + o.getMobileNum() + "]: ");
-        email = getString(keyboard, "Enter county: [" + o.getCounty() + "]: ");
+        mobilenum = getInt(keyboard, "Enter mobilenum: [" + o.getMobileNum() + "]: ", 0);
+        email = getString(keyboard, "Enter email: [" + o.getEmail() + "]: ");
     
         //while the code below will set it to whichever the user type into the database and later on we can check(view) whether it worked or not.
         if (firstname.length() != 0) {
@@ -536,8 +507,7 @@ public class PMCDemoApp {
         if (county.length() != 0) {
             o.setCounty(county);
         }
-        if (line3.length() != 0) {
-            mobilenum = Integer.parseInt(line3);
+        if (mobilenum != o.getMobileNum()) {
             o.setMobileNum(mobilenum);
         }
         if (email.length() != 0) {
@@ -547,8 +517,7 @@ public class PMCDemoApp {
     
     //the code below will return true or false whether the Owner has been updated or not.
     private static void editOwner(Scanner keyboard, Model model) {
-        System.out.print("Enter the OwnerID of the owner you wish to edit: ");
-        int ownerID = Integer.parseInt(keyboard.nextLine());
+        int ownerID = getInt(keyboard, "Enter the OwnerID of the owner you wish to edit: ", 0);
         Owner o;
 
         o = model.findOwnerById(ownerID);
@@ -580,8 +549,7 @@ public class PMCDemoApp {
     
     //the code below will return true or false whether the Owner has been deleted or not.
     private static void deleteOwner(Scanner keyboard, Model model) {
-        System.out.print("Enter the OwnerID of the owner you wish to delete: ");
-        int ownerID = Integer.parseInt(keyboard.nextLine());
+        int ownerID = getInt(keyboard, "Enter the OwnerID of the owner you wish to edit: ", 0);
         Owner o;
 
         o = model.findOwnerById(ownerID);
