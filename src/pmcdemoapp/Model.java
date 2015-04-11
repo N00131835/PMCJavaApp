@@ -14,10 +14,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Model {
+    //needed to access the database.
 
     private static Model instance = null;
 
-    public static synchronized Model getInstance() {
+    public static synchronized Model getInstance() throws DataAccessException {
         if (instance == null) {
             instance = new Model();
         }
@@ -35,7 +36,7 @@ public class Model {
     //private TenantTableGateway tenantGateway;
 
     //this will connect to the DBConnection class that would be able to connect to the database phpmyadmin
-    private Model() {
+    private Model() throws DataAccessException {
 
         try {
             Connection conn = DBConnection.getInstance();
@@ -50,10 +51,10 @@ public class Model {
             //this.tenants = this.tenantGateway.getTenants();
         } 
         catch (ClassNotFoundException ex) {
-            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataAccessException("Exception initialising Model object: " + ex.getMessage());
         } 
         catch (SQLException ex) {
-            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataAccessException("Exception initialising Model object: " + ex.getMessage());
         }
     }
 
@@ -64,18 +65,18 @@ public class Model {
     }
     
     //the code below will be able to add a property 
-    public void addProperty(Property p) {
+    public void addProperty(Property p) throws DataAccessException {
         try {
             propertyGateway.insertProperty(p.getAddress1(), p.getAddress2(), p.getTown(), p.getCounty(), p.getDescription(), p.getRent(), p.getBedrooms());
             this.properties.add(p);
         } 
         catch (SQLException ex) {
-            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataAccessException("Exception adding property: " + ex.getMessage());
         }
     }
     
     //the code below will be able to delete a property 
-    public boolean removeProperty(Property p) {
+    public boolean removeProperty(Property p) throws DataAccessException {
         boolean removed = false;
         
         try {
@@ -85,7 +86,7 @@ public class Model {
             }
         }
         catch (SQLException ex) {
-            Logger.getLogger(Model.class.getName()).log(Level.SEVERE , null, ex);
+            throw new DataAccessException("Exception removing property: " + ex.getMessage());
         }   
         return removed;
     }
@@ -93,14 +94,14 @@ public class Model {
     //@author n00131835
     
     //the code below will be able to update a property 
-    public boolean updateProperty(Property p) {
+    public boolean updateProperty(Property p) throws DataAccessException {
         boolean updated = false;
         
         try {
             updated = this.propertyGateway.updateProperty(p);
         }
         catch (SQLException ex) {
-            Logger.getLogger(Model.class.getName()).log(Level.SEVERE , null, ex);
+            throw new DataAccessException("Exception updating property: " + ex.getMessage());
         }   
         return updated;
     }
@@ -133,14 +134,14 @@ public class Model {
     //@author n00131835
     
     //the code below will be able to update a area 
-    public boolean updateArea(Area a) {
+    public boolean updateArea(Area a) throws DataAccessException {
         boolean updated = false;
         
         try {
             updated = this.areaGateway.updateArea(a);
         }
         catch (SQLException ex) {
-            Logger.getLogger(Model.class.getName()).log(Level.SEVERE , null, ex);
+            throw new DataAccessException("Exception updating area: " + ex.getMessage());
         }   
         return updated;
     }
@@ -171,18 +172,18 @@ public class Model {
     }
     
     //the code below will be able to add a owner
-    public void addOwner(Owner o) {
+    public void addOwner(Owner o) throws DataAccessException {
         try {
             ownerGateway.insertOwner(o.getFirstName(), o.getLastName(), o.getAddress1(), o.getAddress2(), o.getTown(), o.getCounty(), o.getMobileNum(), o.getEmail());
             this.owners.add(o);
         } 
         catch (SQLException ex) {
-            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataAccessException("Exception adding owner: " + ex.getMessage());
         }
     }
     
     //the code below will be able to delete a owner
-    public boolean removeOwner(Owner o) {
+    public boolean removeOwner(Owner o) throws DataAccessException {
         boolean removed = false;
         
         try {
@@ -192,7 +193,7 @@ public class Model {
             }
         }
         catch (SQLException ex) {
-            Logger.getLogger(Model.class.getName()).log(Level.SEVERE , null, ex);
+            throw new DataAccessException("Exception deleting owner: " + ex.getMessage());
         }   
         return removed;
     }
@@ -200,14 +201,14 @@ public class Model {
     //@author n00131835
     
     //the code below will be able to update a owner
-    public boolean updateOwner(Owner o) {
+    public boolean updateOwner(Owner o) throws DataAccessException {
         boolean updated = false;
         
         try {
             updated = this.ownerGateway.updateOwner(o);
         }
         catch (SQLException ex) {
-            Logger.getLogger(Model.class.getName()).log(Level.SEVERE , null, ex);
+            throw new DataAccessException("Exception updating owner: " + ex.getMessage());
         }   
         return updated;
     }

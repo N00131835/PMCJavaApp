@@ -28,129 +28,136 @@ public class PMCDemoApp {
     public static void main(String[] args) {
         Scanner keyboard = new Scanner(System.in);
         
-        Model model = Model.getInstance(); // Model Class
+        Model model; // Model Class
         
         Property p; // Property Class
         Owner o; // Owner Class
         
-        int option; // initialising the variable option
+        int option = 11; // initialising the variable option
         
         //a Do-While loop is used so that we can keep asking the user what they need to do, and it will stop looping when the user press the exit option, which in this case it's 5
         do {
             //this is the main menu
-            
-            System.out.println("-------------------------");
-            System.out.println("--------PROPERTY---------");
-            System.out.println("-------------------------");
-            System.out.println("1. Create new Property");
-            System.out.println("2. View all Property");
-            System.out.println("3. Edit existing Property");
-            System.out.println("4. Delete Property");
-            System.out.println("-------------------------");
-            System.out.println("----------AREA-----------");
-            System.out.println("-------------------------");
-            System.out.println("5. View all Areas");
-            System.out.println("6. Edit existing Area");
-            System.out.println("-------------------------");
-            System.out.println("----------OWNER----------");
-            System.out.println("-------------------------");
-            System.out.println("7. Create new Owner");
-            System.out.println("8. View all Owner");
-            System.out.println("9. Edit existing Owner");
-            System.out.println("10. Delete Owner");
-            System.out.println("-------------------------");
-            System.out.println("11. Exit");
-            System.out.println("-------------------------");
-            System.out.println();
-            
-            //This is where the user will type the option they want to pick
-            option = getInt(keyboard, "Enter an option: ", 11);
-            
-            //@author n00131835
-            //System.out.println("You chose option " + option);
-            switch (option) {
-                //PROPERTY OPTIONS
-                case 1: {
-                    System.out.println("Creating a Property");
-                    System.out.println();
-                    p = readProperty(keyboard);
-                    model.addProperty(p);
-                    break;
-                    //option 1 is Creating a Property
+            try{
+                model = Model.getInstance();
+                System.out.println("-------------------------");
+                System.out.println("--------PROPERTY---------");
+                System.out.println("-------------------------");
+                System.out.println("1. Create new Property");
+                System.out.println("2. View all Property");
+                System.out.println("3. Edit existing Property");
+                System.out.println("4. Delete Property");
+                System.out.println("-------------------------");
+                System.out.println("----------AREA-----------");
+                System.out.println("-------------------------");
+                System.out.println("5. View all Areas");
+                System.out.println("6. Edit existing Area");
+                System.out.println("-------------------------");
+                System.out.println("----------OWNER----------");
+                System.out.println("-------------------------");
+                System.out.println("7. Create new Owner");
+                System.out.println("8. View all Owner");
+                System.out.println("9. Edit existing Owner");
+                System.out.println("10. Delete Owner");
+                System.out.println("-------------------------");
+                System.out.println("11. Exit");
+                System.out.println("-------------------------");
+                System.out.println();
+
+                //This is where the user will type the option they want to pick
+                option = getInt(keyboard, "Enter an option: ", 11);
+
+                //@author n00131835
+                //System.out.println("You chose option " + option);
+                switch (option) {
+                    //PROPERTY OPTIONS
+                    case 1: {
+                        System.out.println("Creating a Property");
+                        System.out.println();
+                        p = readProperty(keyboard);
+                        model.addProperty(p);
+                        break;
+                        //option 1 is Creating a Property
+                    }
+                    case 2: {
+                        System.out.println("Viewing all the Properties");
+                        System.out.println();
+                        viewProperty(model);
+                        break;
+                        //option 2 is Viewing all the Properties
+                    }
+                    case 3: {
+                        System.out.println("Editing a Property");
+                        System.out.println();
+                        editProperty(keyboard, model);
+                        break;
+                        //option 3 is Editing a Property
+                    }
+                    case 4: {
+                        System.out.println("Deleting a Property");
+                        System.out.println();
+                        deleteProperty(keyboard, model);
+                        break;
+                        //option 4 is Deleting a Property
+                    }
+
+                    // AREA OPTIONS
+                    case 5: {
+                        System.out.println("Viewing all Areas");
+                        System.out.println();
+                        viewArea(model);
+                        break;
+                        //option 2 is Viewing all the Properties
+                    }
+                    case 6: {
+                        System.out.println("Editing an Area");
+                        System.out.println();
+                        editArea(keyboard, model);
+                        break;
+                        //option 3 is Editing a Property
+                    }
+
+                    //OWNER OPTIONS
+                    case 7: {
+                        System.out.println("Creating an Owner");
+                        System.out.println();
+                        o = readOwner(keyboard);
+                        model.addOwner(o);
+                        break;
+                        //option 1 is Creating an Owner
+                    }
+                    case 8: {
+                        System.out.println("Viewing all the Owners");
+                        System.out.println();
+                        viewOwner(model);
+                        break;
+                        //option 2 is Viewing all the Owners
+                    }
+                    case 9: {
+                        System.out.println("Editing an Owner");
+                        System.out.println();
+                        editOwner(keyboard, model);
+                        break;
+                        //option 3 is Editing an Owner
+                    }
+                    case 10: {
+                        System.out.println("Deleting an Owner");
+                        System.out.println();
+                        deleteOwner(keyboard, model);
+                        break;
+                        //option 4 is Deleting an Owner
+                    }
                 }
-                case 2: {
-                    System.out.println("Viewing all the Properties");
-                    System.out.println();
-                    viewProperty(model);
-                    break;
-                    //option 2 is Viewing all the Properties
-                }
-                case 3: {
-                    System.out.println("Editing a Property");
-                    System.out.println();
-                    editProperty(keyboard, model);
-                    break;
-                    //option 3 is Editing a Property
-                }
-                case 4: {
-                    System.out.println("Deleting a Property");
-                    System.out.println();
-                    deleteProperty(keyboard, model);
-                    break;
-                    //option 4 is Deleting a Property
-                }
-                
-                // AREA OPTIONS
-                case 5: {
-                    System.out.println("Viewing all Areas");
-                    System.out.println();
-                    viewArea(model);
-                    break;
-                    //option 2 is Viewing all the Properties
-                }
-                case 6: {
-                    System.out.println("Editing an Area");
-                    System.out.println();
-                    editArea(keyboard, model);
-                    break;
-                    //option 3 is Editing a Property
-                }
-                
-                //OWNER OPTIONS
-                case 7: {
-                    System.out.println("Creating an Owner");
-                    System.out.println();
-                    o = readOwner(keyboard);
-                    model.addOwner(o);
-                    break;
-                    //option 1 is Creating an Owner
-                }
-                case 8: {
-                    System.out.println("Viewing all the Owners");
-                    System.out.println();
-                    viewOwner(model);
-                    break;
-                    //option 2 is Viewing all the Owners
-                }
-                case 9: {
-                    System.out.println("Editing an Owner");
-                    System.out.println();
-                    editOwner(keyboard, model);
-                    break;
-                    //option 3 is Editing an Owner
-                }
-                case 10: {
-                    System.out.println("Deleting an Owner");
-                    System.out.println();
-                    deleteOwner(keyboard, model);
-                    break;
-                    //option 4 is Deleting an Owner
-                }
+            }
+            catch(DataAccessException e){
+                System.out.println();
+                System.out.println(e.getMessage());
+                System.out.println();
             }
         }
         while (option != 11);
         //option 5 is going to stop the application from running.
-        System.out.println("Goodbye");
+        System.out.println("EXIT");
         
     }
     
@@ -244,13 +251,13 @@ public class PMCDemoApp {
         int rent, bedrooms;
         
         //this will get the information for the database and place it in i.e. p.getAddress1
-        address1 = getString(keyboard, "Enter address1: [" + p.getAddress1() + "]: ");
-        address2 = getString(keyboard, "Enter address2: [" + p.getAddress2() + "]: ");
-        town = getString(keyboard, "Enter town: [" + p.getTown() + "]: ");
-        county = getString(keyboard, "Enter county: [" + p.getCounty() + "]: ");
-        description = getString(keyboard, "Enter description: [" + p.getDescription() + "]: ");
-        rent = getInt(keyboard, "Enter rent: [" + p.getRent() + "]: ", 0);
-        bedrooms = getInt(keyboard, "Enter bedrooms: [" + p.getBedrooms() + "]: ", 0);
+        address1 = getString(keyboard, "Edit address1: [" + p.getAddress1() + "]: ");
+        address2 = getString(keyboard, "Edit address2: [" + p.getAddress2() + "]: ");
+        town = getString(keyboard, "Edit town: [" + p.getTown() + "]: ");
+        county = getString(keyboard, "Edit county: [" + p.getCounty() + "]: ");
+        description = getString(keyboard, "Edit description: [" + p.getDescription() + "]: ");
+        rent = getInt(keyboard, "Edit rent: [" + p.getRent() + "]: ", 0);
+        bedrooms = getInt(keyboard, "Edit bedrooms: [" + p.getBedrooms() + "]: ", 0);
     
         //while the code below will set it to whichever the user type into the database and later on we can check(view) whether it worked or not.
         if (address1.length() != 0) {
@@ -277,7 +284,7 @@ public class PMCDemoApp {
     }
     
     //the code below will return true or false whether the Property has been updated or not.
-    private static void editProperty(Scanner keyboard, Model model) {
+    private static void editProperty(Scanner keyboard, Model model) throws DataAccessException {
         int propertyID = getInt(keyboard, "Enter the PropertyID of the property you wish to edit: ", 0);
         Property p;
 
@@ -309,8 +316,8 @@ public class PMCDemoApp {
     }
     
     //the code below will return true or false whether the Property has been deleted or not.
-    private static void deleteProperty(Scanner keyboard, Model model) {
-        int propertyID = getInt(keyboard, "Enter the PropertyID of the property you wish to edit: ", 0);
+    private static void deleteProperty(Scanner keyboard, Model model) throws DataAccessException {
+        int propertyID = getInt(keyboard, "Enter the PropertyID of the property you wish to delete: ", 0);
         Property p;
 
         p = model.findPropertyById(propertyID);
@@ -371,8 +378,8 @@ public class PMCDemoApp {
         String areaname, facilities;
         
         //this will get the information for the database and place it in i.e. a.getAreaName
-        areaname = getString(keyboard, "Enter AreaName: [" + a.getAreaName() + "]: ");
-        facilities = getString(keyboard, "Enter Facilities: [" + a.getFacilities() + "]: ");
+        areaname = getString(keyboard, "Edit AreaName: [" + a.getAreaName() + "]: ");
+        facilities = getString(keyboard, "Edit Facilities: [" + a.getFacilities() + "]: ");
     
         //while the code below will set it to whichever the user type into the database and later on we can check(view) whether it worked or not.
         if (areaname.length() != 0) {
@@ -384,7 +391,7 @@ public class PMCDemoApp {
     }
     
     //the code below will return true or false whether the Area has been updated or not.
-    private static void editArea(Scanner keyboard, Model model) {
+    private static void editArea(Scanner keyboard, Model model) throws DataAccessException {
         int areaID = getInt(keyboard, "Enter the AreaID of the area you wish to edit: ", 0);
         Area a;
 
@@ -479,14 +486,14 @@ public class PMCDemoApp {
         int mobilenum;
         
         //this will get the information for the database and place it in i.e. o.getAddress1
-        firstname = getString(keyboard, "Enter firstname: [" + o.getFirstName() + "]: ");
-        lastname = getString(keyboard, "Enter lastname: [" + o.getLastName() + "]: ");
-        address1 = getString(keyboard, "Enter address1: [" + o.getAddress1() + "]: ");
-        address2 = getString(keyboard, "Enter address2: [" + o.getAddress2() + "]: ");
-        town = getString(keyboard, "Enter town: [" + o.getTown() + "]: ");
-        county = getString(keyboard, "Enter county: [" + o.getCounty() + "]: ");
-        mobilenum = getInt(keyboard, "Enter mobilenum: [" + o.getMobileNum() + "]: ", 0);
-        email = getString(keyboard, "Enter email: [" + o.getEmail() + "]: ");
+        firstname = getString(keyboard, "Edit firstname: [" + o.getFirstName() + "]: ");
+        lastname = getString(keyboard, "Edit lastname: [" + o.getLastName() + "]: ");
+        address1 = getString(keyboard, "Edit address1: [" + o.getAddress1() + "]: ");
+        address2 = getString(keyboard, "Edit address2: [" + o.getAddress2() + "]: ");
+        town = getString(keyboard, "Edit town: [" + o.getTown() + "]: ");
+        county = getString(keyboard, "Edit county: [" + o.getCounty() + "]: ");
+        mobilenum = getInt(keyboard, "Edit mobilenum: [" + o.getMobileNum() + "]: ", 0);
+        email = getString(keyboard, "Edit email: [" + o.getEmail() + "]: ");
     
         //while the code below will set it to whichever the user type into the database and later on we can check(view) whether it worked or not.
         if (firstname.length() != 0) {
@@ -516,7 +523,7 @@ public class PMCDemoApp {
     }
     
     //the code below will return true or false whether the Owner has been updated or not.
-    private static void editOwner(Scanner keyboard, Model model) {
+    private static void editOwner(Scanner keyboard, Model model) throws DataAccessException {
         int ownerID = getInt(keyboard, "Enter the OwnerID of the owner you wish to edit: ", 0);
         Owner o;
 
@@ -548,8 +555,8 @@ public class PMCDemoApp {
     }
     
     //the code below will return true or false whether the Owner has been deleted or not.
-    private static void deleteOwner(Scanner keyboard, Model model) {
-        int ownerID = getInt(keyboard, "Enter the OwnerID of the owner you wish to edit: ", 0);
+    private static void deleteOwner(Scanner keyboard, Model model) throws DataAccessException {
+        int ownerID = getInt(keyboard, "Enter the OwnerID of the owner you wish to delete: ", 0);
         Owner o;
 
         o = model.findOwnerById(ownerID);
