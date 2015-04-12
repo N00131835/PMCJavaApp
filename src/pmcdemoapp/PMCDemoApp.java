@@ -443,10 +443,10 @@ public class PMCDemoApp {
         }
         else {
             // This will create the columns that will appear here in the output when you run the app.
-            System.out.printf("%10s %20s %20s", "AreaID", "AreaName", "Facilities");
+            System.out.printf("%10s %30s %40s\n", "AreaID", "AreaName", "Facilities");
             for (Area a : areas) {
                 // This will create the columns where the info from the database is being placed.
-                System.out.printf("%10d %20s %20s",
+                System.out.printf("%10d %30s %40s\n",
                         a.getAreaID(),
                         a.getAreaName(),
                         a.getFacilities());
