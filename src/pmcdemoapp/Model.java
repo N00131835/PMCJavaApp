@@ -61,19 +61,18 @@ public class Model {
     //@author n00131835
         
     public List<Property> getProperties() {
-        return new ArrayList<Property>(this.properties);
+        return this.properties;
     }
     
-    //the code below will be able to add a property 
-    /*public void addProperty(Property p) throws DataAccessException {
-        try {
-            propertyGateway.insertProperty(p.getAddress1(), p.getAddress2(), p.getTown(), p.getCounty(), p.getAreaId(), p.getDescription(), p.getRent(), p.getBedrooms());
-            this.properties.add(p);
-        } 
-        catch (SQLException ex) {
-            throw new DataAccessException("Exception adding property: " + ex.getMessage());
+    public List<Property> getPropertiesByAreaID(int areaID) {
+        List<Property> list = new ArrayList<Property>();
+        for (Property p : this.properties){
+            if (p.getAreaId() == areaID){
+                list.add(p);
+            }
         }
-    }*/
+        return list;
+    }
     
     public boolean addProperty(Property p) throws DataAccessException {
         boolean result = false;

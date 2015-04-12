@@ -68,7 +68,7 @@ public class PMCDemoApp {
                 System.out.println();
 
                 //This is where the user will type the option they want to pick
-                option = getInt(keyboard, "Enter an option: ", 11);
+                option = getInt(keyboard, "Enter an option: ", 14);
 
                 //@author n00131835
                 //System.out.println("You chose option " + option);
@@ -84,7 +84,7 @@ public class PMCDemoApp {
                     case 2: {
                         System.out.println("Viewing all the Properties");
                         System.out.println();
-                        viewProperty(model);
+                        viewProperties(model);
                         break;
                         //option 2 is Viewing all the Properties
                     }
@@ -96,58 +96,79 @@ public class PMCDemoApp {
                         //option 3 is Editing a Property
                     }
                     case 4: {
+                        System.out.println("Viewing a single Property");
+                        System.out.println();
+                        viewProperty(keyboard, model);
+                        break;
+                        //option 4 is Viewing all the Properties
+                    }
+                    case 5: {
                         System.out.println("Deleting a Property");
                         System.out.println();
                         deleteProperty(keyboard, model);
                         break;
-                        //option 4 is Deleting a Property
+                        //option 5 is Deleting a Property
                     }
 
                     // AREA OPTIONS
-                    case 5: {
+                    case 6: {
                         System.out.println("Viewing all Areas");
                         System.out.println();
-                        viewArea(model);
+                        viewAreas(model);
                         break;
-                        //option 2 is Viewing all the Properties
+                        //option 6 is Viewing all Areas
                     }
-                    case 6: {
+                    case 7: {
                         System.out.println("Editing an Area");
                         System.out.println();
                         editArea(keyboard, model);
                         break;
-                        //option 3 is Editing a Property
+                        //option 7 is Editing a Area
+                    }
+                    case 8: {
+                        System.out.println("Viewing a single Area");
+                        System.out.println();
+                        viewArea(keyboard, model);
+                        break;
+                        //option 8 is Viewing a single Area
                     }
 
                     //OWNER OPTIONS
-                    case 7: {
+                    case 9: {
                         System.out.println("Creating an Owner");
                         System.out.println();
                         o = readOwner(keyboard);
                         model.addOwner(o);
                         break;
-                        //option 1 is Creating an Owner
+                        //option 9 is Creating an Owner
                     }
-                    case 8: {
+                    case 10: {
                         System.out.println("Viewing all the Owners");
                         System.out.println();
-                        viewOwner(model);
+                        viewOwners(model);
                         break;
-                        //option 2 is Viewing all the Owners
+                        //option 10 is Viewing all the Owners
                     }
-                    case 9: {
+                    case 11: {
                         System.out.println("Editing an Owner");
                         System.out.println();
                         editOwner(keyboard, model);
                         break;
-                        //option 3 is Editing an Owner
+                        //option 11 is Editing an Owner
                     }
-                    case 10: {
+                    case 12: {
+                        System.out.println("Viewing a single Owner");
+                        System.out.println();
+                        viewOwner(keyboard, model);
+                        break;
+                        //option 12 is Viewing a single Owner
+                    }
+                    case 13: {
                         System.out.println("Deleting an Owner");
                         System.out.println();
                         deleteOwner(keyboard, model);
                         break;
-                        //option 4 is Deleting an Owner
+                        //option 13 is Deleting an Owner
                     }
                 }
             }
@@ -232,13 +253,20 @@ public class PMCDemoApp {
     }  
 
     //the code below is the one that can show the user the property when you run the application
-    private static void viewProperty(Model model) {
+    private static void viewProperties(Model model) {
         List<Property> properties = model.getProperties();
         if (properties.isEmpty()){
             System.out.println("The are no properties in the database.");
         }
         else {
-            // This will create the columns that will appear here in the output when you run the app.
+            displayProperties(properties, model);
+        }
+        System.out.println(); 
+        System.out.println(); 
+    }
+
+    private static void displayProperties (List<Property> properties, Model model){
+        // This will create the columns that will appear here in the output when you run the app.
             System.out.printf("%10s %20s %20s %15s %12s %25s %25s %10s %10s\n", "PropertyID", "Address1", "Address2", "Town", "County", "AreaID", "Description", "Rent", "Bedrooms");
             for (Property p : properties) {
                 int length = p.getDescription().length();
@@ -261,9 +289,7 @@ public class PMCDemoApp {
             }
         System.out.println(); 
         System.out.println(); //This is just a line break so that the code in not too squished.
-        }
     }
-
     //@author n00131835
     
     //the code below allows the user to edit the property when you run the application
@@ -341,6 +367,40 @@ public class PMCDemoApp {
         }
     }
     
+    //the code below will return true or false whether the Property has been viewed or not.
+    //this is viewing a single Property.
+    private static void viewProperty(Scanner keyboard, Model model) throws DataAccessException {
+        int propertyID = getInt(keyboard, "Enter the PropertyID of the property you wish to view: ", 0);
+        Property p;
+
+        p = model.findPropertyById(propertyID);
+        if (p != null) {
+            Area a = model.findAreaById(p.getAreaId());
+            
+            System.out.println();
+            System.out.println();
+            System.out.println("Viewing Property ID   :   " + p.getPropertyID());
+            System.out.println();
+            System.out.println("Address 1             :   " + p.getAddress1());
+            System.out.println("Address 2             :   " + p.getAddress2());
+            System.out.println("Town                  :   " + p.getTown());
+            System.out.println("County                :   " + p.getCounty());
+            System.out.println("Area Name             :   " + ((a != null) ? a.getAreaName() : "No Area")); //tertiary expression
+            System.out.println("Description           :   " + p.getDescription());
+            System.out.println("Rent                  :   " + p.getRent());
+            System.out.println("Bedrooms              :   " + p.getBedrooms());
+            System.out.println();
+            System.out.println();//This is just a line break so that the code is not too squished.
+        }
+        else {
+            System.out.println();
+            System.out.println();
+            System.out.println("Property not found");
+            System.out.println();
+            System.out.println();//This is just a line break so that the code is not too squished.
+        }
+    }
+    
     //the code below will return true or false whether the Property has been deleted or not.
     private static void deleteProperty(Scanner keyboard, Model model) throws DataAccessException {
         int propertyID = getInt(keyboard, "Enter the PropertyID of the property you wish to delete: ", 0);
@@ -376,7 +436,7 @@ public class PMCDemoApp {
     ////////////////////////////////////////////////////////////////////////////
     
     //the code below is the one that can show the user the area when you run the application
-    private static void viewArea(Model model) {
+    private static void viewAreas(Model model) {
         List<Area> areas = model.getAreas();
         if (areas.isEmpty()){
             System.out.println("The are no areas in the database.");
@@ -448,6 +508,47 @@ public class PMCDemoApp {
         }
     }
     
+    //the code below will return true or false whether the Area has been viewed or not.
+    //this is viewing a single Area.
+    private static void viewArea(Scanner keyboard, Model model) throws DataAccessException {
+        int areaID = getInt(keyboard, "Enter the AreaID of the area you wish to view: ", 0);
+        Area a;
+
+        a = model.findAreaById(areaID);
+        if (a != null) {
+            System.out.println();
+            System.out.println();
+            System.out.println("Viewing Area ID   :   " + a.getAreaID());
+            System.out.println();
+            System.out.println("Area Name         :   " + a.getAreaName());
+            System.out.println("Facilities        :   " + a.getFacilities());
+            System.out.println();
+            System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------");
+            List<Property> propertylist = model.getPropertiesByAreaID(a.getAreaID());
+            if (propertylist.isEmpty()){
+                System.out.println();
+                System.out.println();
+                System.out.println("This area has no available Properties.");
+                System.out.println();
+            }
+            else {
+                System.out.println();
+                System.out.println("This is/are the properties in this area :");
+                System.out.println();
+                displayProperties(propertylist, model);
+            }
+            System.out.println();
+            System.out.println();//This is just a line break so that the code is not too squished.
+        }
+        else {
+            System.out.println();
+            System.out.println();
+            System.out.println("Area not found");
+            System.out.println();
+            System.out.println();//This is just a line break so that the code is not too squished.
+        }
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
     
     //the code below is the one that creates the owner when you run the application
@@ -473,7 +574,7 @@ public class PMCDemoApp {
     }  
 
     //the code below is the one that can show the user the owner when you run the application
-    private static void viewOwner(Model model) {
+    private static void viewOwners(Model model) {
         List<Owner> owners = model.getOwners();
         if (owners.isEmpty()){
             System.out.println("The are no owners in the database.");
@@ -577,6 +678,38 @@ public class PMCDemoApp {
             System.out.println("Owner not found");
             System.out.println();
             System.out.println(); //This is just a line break so that the code is not too squished.
+        }
+    }
+    
+    //the code below will return true or false whether the Owner has been viewed or not.
+    //this is viewing a single Owner.
+    private static void viewOwner(Scanner keyboard, Model model) throws DataAccessException {
+        int ownerID = getInt(keyboard, "Enter the OwnerID of the owner you wish to view: ", 0);
+        Owner o;
+
+        o = model.findOwnerById(ownerID);
+        if (o != null) {
+            System.out.println();
+            System.out.println();
+            System.out.println("Viewing Owner ID   :   " + o.getOwnerID());
+            System.out.println();
+            System.out.println("First Name         :   " + o.getFirstName());
+            System.out.println("Last Name          :   " + o.getLastName());
+            System.out.println("Address 1          :   " + o.getAddress1());
+            System.out.println("Address 2          :   " + o.getAddress2());
+            System.out.println("Town               :   " + o.getTown());
+            System.out.println("County             :   " + o.getCounty());
+            System.out.println("Mobile Number      :   " + o.getMobileNum());
+            System.out.println("Email              :   " + o.getEmail());
+            System.out.println();
+            System.out.println();//This is just a line break so that the code is not too squished.
+        }
+        else {
+            System.out.println();
+            System.out.println();
+            System.out.println("Owner not found");
+            System.out.println();
+            System.out.println();//This is just a line break so that the code is not too squished.
         }
     }
     
