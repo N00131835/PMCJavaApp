@@ -33,7 +33,7 @@ public class PMCDemoApp {
         Property p; // Property Class
         Owner o; // Owner Class
         
-        int option = 11; // initialising the variable option
+        int option = 14; // initialising the variable option, 14 is the default value because its the option for the exit feature for this program.
         
         //a Do-While loop is used so that we can keep asking the user what they need to do, and it will stop looping when the user press the exit option, which in this case it's 5
         do {
@@ -44,23 +44,26 @@ public class PMCDemoApp {
                 System.out.println("--------PROPERTY---------");
                 System.out.println("-------------------------");
                 System.out.println("1. Create new Property");
-                System.out.println("2. View all Property");
+                System.out.println("2. View all Properties");
                 System.out.println("3. Edit existing Property");
-                System.out.println("4. Delete Property");
+                System.out.println("4. View a single Property");
+                System.out.println("5. Delete Property");
                 System.out.println("-------------------------");
                 System.out.println("----------AREA-----------");
                 System.out.println("-------------------------");
-                System.out.println("5. View all Areas");
-                System.out.println("6. Edit existing Area");
+                System.out.println("6. View all Areas");
+                System.out.println("7. Edit existing Area");
+                System.out.println("8. View a single Area");
                 System.out.println("-------------------------");
                 System.out.println("----------OWNER----------");
                 System.out.println("-------------------------");
-                System.out.println("7. Create new Owner");
-                System.out.println("8. View all Owner");
-                System.out.println("9. Edit existing Owner");
-                System.out.println("10. Delete Owner");
+                System.out.println("9. Create new Owner");
+                System.out.println("10. View all Owners");
+                System.out.println("11. Edit existing Owner");
+                System.out.println("12. View a single Owner");
+                System.out.println("13. Delete Owner");
                 System.out.println("-------------------------");
-                System.out.println("11. Exit");
+                System.out.println("14. Exit");
                 System.out.println("-------------------------");
                 System.out.println();
 
@@ -74,8 +77,7 @@ public class PMCDemoApp {
                     case 1: {
                         System.out.println("Creating a Property");
                         System.out.println();
-                        p = readProperty(keyboard);
-                        model.addProperty(p);
+                        createProperty(keyboard, model);
                         break;
                         //option 1 is Creating a Property
                     }
@@ -155,7 +157,7 @@ public class PMCDemoApp {
                 System.out.println();
             }
         }
-        while (option != 11);
+        while (option != 14);
         //option 5 is going to stop the application from running.
         System.out.println("EXIT");
         
@@ -190,24 +192,41 @@ public class PMCDemoApp {
         
         return option;
     }
-   
+    
+    private static void createProperty(Scanner keyboard, Model model) throws DataAccessException {
+        Property p = readProperty(keyboard);
+        if (model.addProperty(p)) {
+            System.out.println();
+            System.out.println("Property successfully added to the database");
+            System.out.println();
+            System.out.println(); //This is just a line break so that the code in not too squished.
+        }
+        else {
+            System.out.println();
+            System.out.println("Property not added to the database");
+            System.out.println();
+            System.out.println(); //This is just a line break so that the code in not too squished.
+         }
+    }
+    
     //the code below is the one that creates the property when you run the application
     private static Property readProperty(Scanner keyboard) {
         //initiliasing variables from the Property Class
         String address1, address2, town, county, description;
-        int rent, bedrooms;
+        int areaId, rent, bedrooms;
 
         address1 = getString(keyboard, "Enter address1: ");
         address2 = getString(keyboard, "Enter address2: ");
         town = getString(keyboard, "Enter town: ");
         county = getString(keyboard, "Enter county: ");
+        areaId = getInt(keyboard, "Enter areaId (areaId can only be 1,2,3,4,5): ", 0);
         description = getString(keyboard, "Enter description: ");
         rent = getInt(keyboard, "Enter rent: ", 0);
         bedrooms = getInt(keyboard, "Enter bedrooms: ", 0);
         System.out.println();
         System.out.println();
 
-        Property p = new Property(address1, address2, town, county, description, rent, bedrooms);
+        Property p = new Property(address1, address2, town, county, areaId, description, rent, bedrooms);
         
         return p;
     }  
@@ -220,19 +239,22 @@ public class PMCDemoApp {
         }
         else {
             // This will create the columns that will appear here in the output when you run the app.
-            System.out.printf("%10s %20s %20s %15s %12s %25s %10s %10s\n", "PropertyID", "Address1", "Address2", "Town", "County", "Description", "Rent", "Bedrooms");
+            System.out.printf("%10s %20s %20s %15s %12s %25s %25s %10s %10s\n", "PropertyID", "Address1", "Address2", "Town", "County", "AreaID", "Description", "Rent", "Bedrooms");
             for (Property p : properties) {
                 int length = p.getDescription().length();
                 if (length > 25) {
                     length = 25;
                 }
+                
+                Area a = model.findAreaById(p.getAreaId());
                 // This will create the columns where the info from the database is being placed.
-                System.out.printf("%10d %20s %20s %15s %12s %25s %10d %10d\n",
+                System.out.printf("%10d %20s %20s %15s %12s %25s %25s %10d %10d\n",
                         p.getPropertyID(),
                         p.getAddress1(),
                         p.getAddress2(),
                         p.getTown(),
                         p.getCounty(),
+                        (a != null) ? a.getAreaName() : "No Area", //tertiary expression
                         p.getDescription().substring(0, length),
                         p.getRent(),
                         p.getBedrooms());
@@ -248,13 +270,14 @@ public class PMCDemoApp {
     private static void editPropertyDetails(Scanner keyboard, Property p) {
         //initiliasing variables from the Property Class
         String address1, address2, town, county, description;
-        int rent, bedrooms;
+        int areaId, rent, bedrooms;
         
         //this will get the information for the database and place it in i.e. p.getAddress1
         address1 = getString(keyboard, "Edit address1: [" + p.getAddress1() + "]: ");
         address2 = getString(keyboard, "Edit address2: [" + p.getAddress2() + "]: ");
         town = getString(keyboard, "Edit town: [" + p.getTown() + "]: ");
         county = getString(keyboard, "Edit county: [" + p.getCounty() + "]: ");
+        areaId = getInt(keyboard, "Enter areaId (areaId can only be 1,2,3,4,5): [" + p.getAreaId() + "]: ", 0);
         description = getString(keyboard, "Edit description: [" + p.getDescription() + "]: ");
         rent = getInt(keyboard, "Edit rent: [" + p.getRent() + "]: ", 0);
         bedrooms = getInt(keyboard, "Edit bedrooms: [" + p.getBedrooms() + "]: ", 0);
@@ -271,6 +294,9 @@ public class PMCDemoApp {
         }
         if (county.length() != 0) {
             p.setCounty(county);
+        }
+        if (areaId != p.getAreaId()) {
+            p.setAreaId(areaId);
         }
         if (description.length() != 0) {
             p.setDescription(description);

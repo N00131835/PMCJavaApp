@@ -13,25 +13,27 @@ public class Property {
     private String address2;
     private String town;
     private String county;
+    private int areaId;
     private String description;
     private int rent;
     private int bedrooms;
 
     //paramitized constructor
-    public Property(int propertyID, String a1, String a2, String tn, String ct, String d, int r, int b) {
+    public Property(int propertyID, String a1, String a2, String tn, String ct, int aIDp, String d, int r, int b) {
         this.propertyID = propertyID;
         this.address1 = a1;
         this.address2 = a2;
         this.town = tn;
         this.county = ct;
+        this.areaId = aIDp;
         this.description = d;
         this.rent = r;
         this.bedrooms = b;
     } 
     
-    public Property(String a1, String a2, String tn, String ct, String d, int r, int b) {
-        //The PropertyID is -1 because ew don't want the user to change or edit the PropertyID values because it's auto-incremented in PHPMYADMIN 
-        this(-1, a1, a2, tn, ct, d, r, b); 
+    public Property(String a1, String a2, String tn, String ct, int aIDp, String d, int r, int b) {
+        //The PropertyID is -1 because we don't want the user to change or edit the PropertyID values because it's auto-incremented in PHPMYADMIN 
+        this(-1, a1, a2, tn, ct, aIDp, d, r, b); 
     }
     
     // get and set methods for PropertyID
@@ -81,6 +83,15 @@ public class Property {
         this.county = county;
     }
 
+    // get and set methods for AreaId
+    public int getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(int areaId) {
+        this.areaId = areaId;
+    }
+
     // get and set methods for Description
     public String getDescription() {
         return description;
@@ -89,7 +100,7 @@ public class Property {
     public void setDescription(String description) {
         this.description = description;
     }
-
+    
     // get and set methods for Rent
     public int getRent() {
         return rent;

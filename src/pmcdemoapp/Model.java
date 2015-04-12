@@ -65,14 +65,30 @@ public class Model {
     }
     
     //the code below will be able to add a property 
-    public void addProperty(Property p) throws DataAccessException {
+    /*public void addProperty(Property p) throws DataAccessException {
         try {
-            propertyGateway.insertProperty(p.getAddress1(), p.getAddress2(), p.getTown(), p.getCounty(), p.getDescription(), p.getRent(), p.getBedrooms());
+            propertyGateway.insertProperty(p.getAddress1(), p.getAddress2(), p.getTown(), p.getCounty(), p.getAreaId(), p.getDescription(), p.getRent(), p.getBedrooms());
             this.properties.add(p);
         } 
         catch (SQLException ex) {
             throw new DataAccessException("Exception adding property: " + ex.getMessage());
         }
+    }*/
+    
+    public boolean addProperty(Property p) throws DataAccessException {
+        boolean result = false;
+        try {
+            int id = this.propertyGateway.insertProperty(p.getAddress1(), p.getAddress2(), p.getTown(), p.getCounty(), p.getAreaId(), p.getDescription(), p.getRent(), p.getBedrooms());
+            if (id != -1) {
+                p.setPropertyID(id);
+                this.properties.add(p);
+                result = true;
+            }
+        }
+        catch (SQLException ex) {
+            throw new DataAccessException("Exception adding property: " + ex.getMessage());
+        }
+        return result;
     }
     
     //the code below will be able to delete a property 
